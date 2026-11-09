@@ -1,0 +1,26 @@
+name: Build Saboteur Vox VST3
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Configure CMake
+      run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+    - name: Build VST3 Plugin
+      run: cmake --build build --config Release --parallel 4
+
+    - name: Upload VST3 Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: SaboteurVox-Windows-VST3
+        path: build/SaboteurVox_artefacts/Release/VST3/Saboteur Vox.vst3
